@@ -19,7 +19,7 @@ str(data)
 ##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
 ```
 
-Note that the steps columns have the correct "int" type and the date column is a factor by default.
+Note that the steps columns have the correct "int" type and the date column is a factor by default. No pre-processing is needed.
 
 ## What is mean total number of steps taken per day?
 
