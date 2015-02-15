@@ -16,7 +16,7 @@ data <- read.csv("activity.csv")
 str(data)
 ```
 
-Note that the steps columns have the correct "int" type and the date column is a factor by default.
+Note that the steps columns have the correct "int" type and the date column is a factor by default. No pre-processing is needed.
 
 ## What is mean total number of steps taken per day?
 
