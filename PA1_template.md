@@ -6,8 +6,6 @@
 The first step of this report is loading and preprocessing the "activity" dataset. We load the dataset with the following R code.
 
 ```r
-suppressMessages(library(dplyr))
-
 data <- read.csv("activity.csv")
 str(data)
 ```
@@ -19,18 +17,19 @@ str(data)
 ##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
 ```
 
-Note that the steps columns have the correct "int" type and the date column is a factor by default. No pre-processing is needed.
+Note that the steps columns have the correct "int" type and the date column is a factor by default. No additional processing is needed at this point.
 
 ## What is mean total number of steps taken per day?
 
-In this section we analyze how many steps are taken a day. We again use the 'dplyr' package. Here is a histrogram of the total number of steps taken each day.
+In this section we analyze how many steps were taken a day. We use 'dplyr' package in R for transforming data and 'ggplot2' package for rendering plots. We calculate the total number of steps taken per each day and plot a histrogram of the computed values.
 
 ```r
+suppressMessages(library(dplyr))
 suppressMessages(library(ggplot2))
 dategroups <- group_by(data, date)
 datesteps <- summarize(dategroups, steps = sum(steps, na.rm=TRUE))
-qplot(steps, data = datesteps, main = "Steps Taken Per Day",
-     xlab = "Steps per day", ylab = "Frequency", binwidth=1000)
+qplot(steps, data = datesteps, main = "Histogram of Steps Taken Per Day",
+      xlab = "Steps per day", ylab = "Frequency", binwidth=1000)
 ```
 
 ![](PA1_template_files/figure-html/dayhist-1.png) 
@@ -56,6 +55,8 @@ median(datesteps$steps)
 
 ## What is the average daily activity pattern?
 
+Let us take a loot at the number of steps taken per each 5-minute intervals averaged over all days. Here is a time-series plot.
+
 
 ```r
 intervalgroups <- group_by(data, interval)
@@ -65,11 +66,34 @@ qplot(interval, avgsteps, data = intervalsteps, geom="line",
       ylab = "Steps (average)")
 ```
 
-![](PA1_template_files/figure-html/intervalmean-1.png) 
+![](PA1_template_files/figure-html/averagedailyplot-1.png) 
+
+The maximum average steps taken in a 5-minute interval is
+
+
+```r
+max(intervalsteps$avgsteps)
+```
+
+```
+## [1] 206.1698
+```
+
+and the maximum was achieved at the following interval
+
+
+```r
+intervalsteps$interval[which.max(intervalsteps$avgsteps)]
+```
+
+```
+## [1] 835
+```
+
 
 ## Imputing missing values
 
-In this section we will analyze the missing values in the data and will fill in all of the missing values. First we calculate the total number of missing values in the data.
+Let us analyze the missing values in the data and will fill in all of the missing values. First we calculate the total number of missing values in the data.
 
 
 ```r
@@ -97,7 +121,7 @@ Now let us make a histogram of the the total number of steps taken each day with
 ```r
 dategroups <- group_by(data_NAremoved, date)
 datesteps <- summarize(dategroups, steps = sum(steps))
-qplot(steps, data = datesteps, main = "Steps Taken Per Day (Removed Missing Values)",
+qplot(steps, data = datesteps, main = "Histogram of Steps Taken Per Day (Removed Missing Values)",
       xlab = "Steps per day", ylab = "Frequency", binwidth = 1000)
 ```
 
